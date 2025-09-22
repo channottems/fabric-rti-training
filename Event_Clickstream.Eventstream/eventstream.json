@@ -1,0 +1,441 @@
+{
+  "sources": [
+    {
+      "id": "f041e98c-f3a6-4734-9846-8c9915fcc505",
+      "name": "CustomEndpoint-Clickstream",
+      "type": "CustomEndpoint",
+      "properties": {}
+    }
+  ],
+  "destinations": [
+    {
+      "id": "3d6ed3a2-babf-494b-9ba0-a2429ae8d337",
+      "name": "Eventhouse",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "46562685-b7e7-83ec-493e-e7f51d9e03d5",
+        "databaseName": "Zava_eventhouse",
+        "tableName": "Clickstream_agg_10min",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "Aggregate"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "Aggregate",
+          "schema": {
+            "columns": [
+              {
+                "name": "Nb_Click",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "event_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "event_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "user_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "session_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "sku",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "country",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "country_code",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "referral_source_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "referral_platform",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "product_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "a0888df0-89b9-4da1-9372-b47b90ca5b16",
+      "name": "Event_Clickstream-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "CustomEndpoint-Clickstream"
+        }
+      ]
+    }
+  ],
+  "operators": [
+    {
+      "name": "Aggregate",
+      "type": "Aggregate",
+      "inputNodes": [
+        {
+          "name": "Filter"
+        }
+      ],
+      "properties": {
+        "aggregations": [
+          {
+            "aggregateFunction": "Sum",
+            "arguments": null,
+            "column": {
+              "expressionType": "ColumnReference",
+              "node": null,
+              "columnName": "PartitionId",
+              "columnPathSegments": []
+            },
+            "alias": "Nb_Click",
+            "partitionBy": [
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "event_id",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "event_type",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "sku",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "country",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "country_code",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "referral_source_type",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "referral_platform",
+                "columnPathSegments": []
+              },
+              {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "product_id",
+                "columnPathSegments": []
+              }
+            ],
+            "duration": {
+              "value": 10,
+              "unit": "Minute"
+            }
+          }
+        ]
+      },
+      "inputSchemas": [
+        {
+          "name": "Filter",
+          "schema": {
+            "columns": [
+              {
+                "name": "event_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "event_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "user_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "session_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "sku",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "country",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "country_code",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "referral_source_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "referral_platform",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "product_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Filter",
+      "type": "Filter",
+      "inputNodes": [
+        {
+          "name": "Event_Clickstream-stream"
+        }
+      ],
+      "properties": {
+        "conditions": [
+          {
+            "column": {
+              "expressionType": "ColumnReference",
+              "node": null,
+              "columnName": "country_code",
+              "columnPathSegments": []
+            },
+            "operatorType": "NotEquals",
+            "value": {
+              "expressionType": "Literal",
+              "dataType": "Nvarchar(max)",
+              "value": "US"
+            }
+          }
+        ]
+      },
+      "inputSchemas": [
+        {
+          "name": "Event_Clickstream-stream",
+          "schema": {
+            "columns": [
+              {
+                "name": "event_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "event_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "user_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "session_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "sku",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "country",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "country_code",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "referral_source_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "referral_platform",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "product_id",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "compatibilityLevel": "1.1"
+}

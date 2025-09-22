@@ -1,0 +1,79 @@
+{
+  "sources": [
+    {
+      "id": "656cfc0a-afe7-4f93-9a79-94c68a0b85b4",
+      "name": "Notebook-manufacturing-custom-endpoint",
+      "type": "CustomEndpoint",
+      "properties": {}
+    }
+  ],
+  "destinations": [
+    {
+      "id": "b7e1ee3d-98b0-4c9a-84cf-d8b335d61832",
+      "name": "Eventhouse",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "46562685-b7e7-83ec-493e-e7f51d9e03d5",
+        "databaseName": "Zava_eventhouse",
+        "tableName": "manufacturing",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "SqlCode"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "SqlCode",
+          "schema": {
+            "columns": []
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "fd15fb5a-edcd-4099-b386-2f24324e10e5",
+      "name": "eventManufacturing-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "Notebook-manufacturing-custom-endpoint"
+        }
+      ]
+    }
+  ],
+  "operators": [
+    {
+      "name": "SqlCode",
+      "type": "SQL",
+      "inputNodes": [
+        {
+          "name": "eventManufacturing-stream"
+        }
+      ],
+      "properties": {
+        "query": "--Init Query\nSELECT * INTO [Eventhouse] FROM [eventManufacturing-stream]"
+      },
+      "inputSchemas": [
+        {
+          "name": "eventManufacturing-stream",
+          "schema": {
+            "columns": []
+          }
+        }
+      ]
+    }
+  ],
+  "compatibilityLevel": "1.1"
+}

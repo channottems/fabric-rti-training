@@ -1,0 +1,5 @@
+// KQL script
+// Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
+
+
+.create-merge table Clickstream_agg_10min (Nb_Click:real, event_id:string, timestamp:string, event_type:string, user_id:string, session_id:string, sku:string, country:string, country_code:string, referral_source_type:string, referral_platform:string, product_id:string, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime) 

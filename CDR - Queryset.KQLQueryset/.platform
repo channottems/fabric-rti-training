@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLQueryset",
+    "displayName": "CDR - Queryset",
+    "description": "CDR - Queryset"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e3b53f6c-f507-8179-447c-df9f634fbf32"
+  }
+}
