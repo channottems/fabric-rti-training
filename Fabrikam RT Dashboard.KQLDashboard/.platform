@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDashboard",
+    "displayName": "Fabrikam RT Dashboard",
+    "description": "Fabrikam RT Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "355f584e-f6e9-ad23-4ce6-532745315312"
+  }
+}

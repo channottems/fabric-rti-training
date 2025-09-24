@@ -1,0 +1,35 @@
+{
+  "autoRefresh": {
+    "enabled": false
+  },
+  "baseQueries": [],
+  "tiles": [],
+  "dataSources": [],
+  "pages": [
+    {
+      "name": "Page 1",
+      "id": "49fbc96b-d0fc-470a-93bb-ec0d904cc0af"
+    }
+  ],
+  "parameters": [
+    {
+      "kind": "duration",
+      "id": "461b15c1-5ed8-4284-87c9-52f12e8a4732",
+      "displayName": "Time range",
+      "description": "",
+      "beginVariableName": "_startTime",
+      "endVariableName": "_endTime",
+      "defaultValue": {
+        "kind": "dynamic",
+        "count": 1,
+        "unit": "hours"
+      },
+      "showOnPages": {
+        "kind": "all"
+      }
+    }
+  ],
+  "queries": [],
+  "schema_version": 64,
+  "title": "Fabrikam RT Dashboard"
+}

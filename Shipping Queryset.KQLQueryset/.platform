@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLQueryset",
+    "displayName": "Shipping Queryset",
+    "description": "Shipping Queryset"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "08f7a9ee-ac62-850b-44ac-42605fceccc9"
+  }
+}

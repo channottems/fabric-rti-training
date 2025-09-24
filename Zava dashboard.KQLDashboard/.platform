@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDashboard",
+    "displayName": "Zava dashboard",
+    "description": "Zava dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f83ac0ac-ce8b-90c3-430a-8beddc118a13"
+  }
+}
