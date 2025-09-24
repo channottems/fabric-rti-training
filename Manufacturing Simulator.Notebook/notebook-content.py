@@ -50,8 +50,8 @@ from faker import Faker
 from azure.eventhub import EventHubProducerClient, EventData
 
 # Configurable Variables
-EVENT_HUB_CONNECTION_STR = "Endpoint=sb://esehamyajyf42t37kfpil3.servicebus.windows.net/;SharedAccessKeyName=key_41fd0927-4894-4d6b-ab2a-b57ef3b3fd7c;SharedAccessKey=6ovBkX3rNJdexWNQgOfDmUzFMYyjkw/qN+AEhMIyuNM=;EntityPath=es_30d097eb-8081-477f-88cf-f67332cd3e5a"
-EVENT_HUB_NAME = "es_30d097eb-8081-477f-88cf-f67332cd3e5a"
+EVENT_HUB_CONNECTION_STR = "Endpoint=sb://eseham3t4cw9ze6tmluxvq.servicebus.windows.net/;SharedAccessKeyName=XXX"
+EVENT_HUB_NAME = "es_5688fbe3-74ba-4ef6-aa7c-9c470a97316a"
 EVENTS_PER_SECOND = 10
 
 NUM_SITES = 10
