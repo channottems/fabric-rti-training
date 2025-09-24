@@ -13,9 +13,6 @@
 # META       "default_lakehouse_workspace_id": "0feddad4-30ec-4838-93c8-cad654a164fa",
 # META       "known_lakehouses": [
 # META         {
-# META           "id": "ed2b117e-32c7-48f1-bcca-92941b562650"
-# META         },
-# META         {
 # META           "id": "5373acee-9fca-479c-b525-4d7e879252f0"
 # META         }
 # META       ]
@@ -38,7 +35,7 @@ import xml.etree.ElementTree as ET
 from azure.storage.blob import BlobServiceClient
 
 # -- Configurable Variables --
-BLOB_CONNECTION_STRING = "https://rtihackstorage.blob.core.windows.net/"
+BLOB_CONNECTION_STRING = "BlobEndpoint=https://rtihackstorage.blob.core.windows.net/;QueueEndpoint=https://rtihackstorage.queue.core.windows.net/;FileEndpoint=https://rtihackstorage.file.core.windows.net/;TableEndpoint=https://rtihackstorage.table.core.windows.net/;SharedAccessSignature=sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-10-27T21:19:54Z&st=2025-09-23T12:04:54Z&spr=https&sig=VOH3Mtpb%2FBteOXVnDkfKb3VsjJph1v7yIuvbjPZvi7g%3D"
 CONTAINER_NAME = "shipping-events"
 
 SHIPPING_PROVIDERS = ["FedEx", "DPD", "UPS"]
