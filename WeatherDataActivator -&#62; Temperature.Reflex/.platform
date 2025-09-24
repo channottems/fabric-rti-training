@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Reflex",
+    "displayName": "WeatherDataActivator -> Temperature"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0a2c2d01-e63b-a181-42b0-7a691e6011c5"
+  }
+}

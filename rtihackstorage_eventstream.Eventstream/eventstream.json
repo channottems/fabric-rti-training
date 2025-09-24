@@ -1,0 +1,25 @@
+{
+  "sources": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "name": "AzureBlobStorageEvents",
+      "type": "AzureBlobStorageEvents",
+      "properties": {
+        "azureBlobStorageEvents": [
+          {
+            "id": "3dd8a333-da25-45af-917d-32ea384a36b0",
+            "azureResourceId": "/subscriptions/aa66a6eb-7a02-47cf-a392-e71fe6c2c203/resourcegroups/rtihack_l400/providers/microsoft.storage/storageaccounts/rtihackstorage",
+            "includedEventTypes": [
+              "Microsoft.Storage.BlobCreated"
+            ]
+          }
+        ],
+        "streamEvents": false
+      }
+    }
+  ],
+  "destinations": [],
+  "streams": [],
+  "operators": [],
+  "compatibilityLevel": "1.0"
+}
