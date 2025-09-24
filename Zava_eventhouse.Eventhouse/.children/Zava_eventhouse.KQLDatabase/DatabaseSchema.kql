@@ -2,4 +2,89 @@
 // Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
 
 
-.create-merge table Clickstream_agg_10min (Nb_Click:real, event_id:string, timestamp:string, event_type:string, user_id:string, session_id:string, sku:string, country:string, country_code:string, referral_source_type:string, referral_platform:string, product_id:string, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime) 
+.create-merge table Product (schema:dynamic, payload:dynamic) 
+.create-merge table WeatherUS (realfeeltemperature:real, dateTime:string, description:string, temperature:real, relativeHumidity:long) 
+.create-merge table Product_Struct (ProductId:string, ProductName:string, SKU:string, Brand:string, Category:string, UnitCost:real) 
+.create-merge table Shipping_Provider_Details (ProviderId:string, Provider:string, contact:string, HQAddress:string) 
+.create-or-alter table Shipping_Provider_Details ingestion csv mapping 'Shipping_Provider_Details_mapping'
+```
+[{"Properties":{"Ordinal":"0"},"column":"ProviderId","datatype":""},{"Properties":{"Ordinal":"1"},"column":"Provider","datatype":""},{"Properties":{"Ordinal":"2"},"column":"contact","datatype":""},{"Properties":{"Ordinal":"3"},"column":"HQAddress","datatype":""}]
+```
+.create-merge table MyStagingTable (sku:string) 
+.create-merge table Manufacturing (event_type:string, timestamp:string, SiteId:string, City:string, AssetId:string, OperatorId:string, OperatorName:string, ProductId:string, SKU:string, BatchId:string, DefectProbability:real, Vibration:real, Temperature:real, Humidity:long, AnomalyFlag:bool) 
+.create-merge table ['Shipping-blob'] (data:string) 
+.create-merge table Clickstream_New (event_type:string, sku:string, country:string, country_code:string, referral_source_type:string, referral_platform:string, product_id:string, COUNT_event_id:long, Window_End_Time:datetime) 
+.create-merge table ShippingBlobEventsSilver (Provider:string, OrderNumber:string, EventTime:datetime, Status:string, DelayReason:string, AnomalyFlag:bool, SourceCity:string, SourceCountry:string, SourceLatitude:real, SourceLongitude:real, DestinationName:string, DestinationStreet:string, DestinationCity:string, DestinationZip:string, DestinationCountry:string, DestinationLatitude:real, DestinationLongitude:real, WeightKg:real, ProductId:string, Size:int, Quantity:int) 
+.create-merge table Manufacturing_with_timestamp (event_type:string, timestamp:string, SiteId:string, City:string, AssetId:string, OperatorId:string, OperatorName:string, ProductId:string, SKU:string, BatchId:string, DefectProbability:real, Vibration:real, Temperature:real, Humidity:long, AnomalyFlag:bool) 
+.create-merge table ManufacturingTypes (event_type:string, timestamp:string, SiteId:string, City:string, AssetId:string, OperatorId:string, OperatorName:string, ProductId:string, SKU:string, BatchId:string, DefectProbability:real, Vibration:real, Temperature:real, Humidity:long, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime, AnomalyFlag:bool) 
+.create-or-alter function with (docstring = "TOP 3 Sku by produt and click", skipvalidation = "true", view = true) V_TOP3SKU_BY_CLICK() { Clickstream_New
+| summarize total_click_by_sku = sum(COUNT_event_id) by sku
+| order by total_click_by_sku desc
+| take 3
+| project sku }
+.create-or-alter function with (folder = "UpdatePolicyFunctions", docstring = "explode JSON", skipvalidation = "true") Product_to_product_struct() {
+    Product
+    | mv-expand payload
+    | where isnotnull(payload.after.ProductId)
+    | project ProductId=tostring(payload.after.ProductId),ProductName=tostring(payload.after.ProductName),SKU=tostring(payload.after.SKU),Brand=tostring(payload.after.Brand),Category=tostring(payload.after.Category),UnitCost=toreal(payload.after.UnitCost)
+    }
+.create-or-alter function with (docstring = "TOP 1 Referral Platform", skipvalidation = "true", view = true) V_TOP1REFERRAL_BY_CLICK() { Clickstream_New
+| summarize totalRedirects=count() by referral_platform
+| top 1 by totalRedirects desc }
+.create-or-alter function with (folder = "Shipping", docstring = "Parse XML shipping events", skipvalidation = "true") ParseShippingEvent() {
+    ['Shipping-blob']
+    | extend xml = parse_xml(data)
+    | project
+        Provider = tostring(xml.ShippingEvent.Provider),
+        OrderNumber = tostring(xml.ShippingEvent.OrderNumber),
+        EventTime = todatetime(xml.ShippingEvent.EventTime),
+        Status = tostring(xml.ShippingEvent.Status),
+        DelayReason = tostring(xml.ShippingEvent.DelayReason),
+        AnomalyFlag = tobool(xml.ShippingEvent.AnomalyFlag),
+        SourceCity = tostring(xml.ShippingEvent.SourceDistributionCenter.City),
+        SourceCountry = tostring(xml.ShippingEvent.SourceDistributionCenter.Country),
+        SourceLatitude = todouble(xml.ShippingEvent.SourceDistributionCenter.Latitude),
+        SourceLongitude = todouble(xml.ShippingEvent.SourceDistributionCenter.Longitude),
+        DestinationName = tostring(xml.ShippingEvent.DestinationAddress.Name),
+        DestinationStreet = tostring(xml.ShippingEvent.DestinationAddress.Street),
+        DestinationCity = tostring(xml.ShippingEvent.DestinationAddress.City),
+        DestinationZip = tostring(xml.ShippingEvent.DestinationAddress.Zip),
+        DestinationCountry = tostring(xml.ShippingEvent.DestinationAddress.Country),
+        DestinationLatitude = todouble(xml.ShippingEvent.DestinationAddress.Latitude),
+        DestinationLongitude = todouble(xml.ShippingEvent.DestinationAddress.Longitude),
+        WeightKg = todouble(xml.ShippingEvent.WeightKg),
+        ProductId = tostring(xml.ShippingEvent.ShippingContents.Product.ProductId),
+        Size = toint(xml.ShippingEvent.ShippingContents.Product.Size),
+        Quantity = toint(xml.ShippingEvent.ShippingContents.Product.Quantity)
+}
+.create-or-alter function with (folder = "Shipping", docstring = "Global join with cleaned Provider values", skipvalidation = "true") GlobalShippingJoinCleaned() {
+    Manufacturing
+    | join kind=inner (
+        external_table('operators')
+    ) on OperatorId
+    | join kind=inner (
+        Product_Struct
+    ) on ProductId
+    | join kind=inner (
+        ShippingBlobEventsSilver
+        | extend ProviderClean = trim(" ", tolower(Provider))
+    ) on ProductId
+    | join kind=inner (
+        Shipping_Provider_Details
+        | extend ProviderClean = trim(" ", tolower(Provider))
+    ) on ProviderClean
+}
+.create-or-alter function with (folder = "Alerts", docstring = "Detect shipping anomalies and return provider details", skipvalidation = "true") ShippingAnomalyAlert() {
+    GlobalShippingJoinCleaned()
+    | where AnomalyFlag == true or DelayReason != "None"
+    | project 
+        OrderNumber,
+        ProductName,
+        Provider,
+        Phone,
+        SiteId
+}
+.create-or-alter materialized-view  LatestOrderStatus on table ShippingBlobEventsSilver { ShippingBlobEventsSilver
+    | summarize arg_max(EventTime, *) by OrderNumber }
+.alter table Product_Struct policy update "[{\"IsEnabled\":true,\"Source\":\"Product\",\"Query\":\"Product_to_product_struct()\",\"IsTransactional\":true,\"PropagateIngestionProperties\":false,\"ManagedIdentity\":null}]"
+.alter table ShippingBlobEventsSilver policy update "[{\"IsEnabled\":true,\"Source\":\"Shipping-blob\",\"Query\":\"ParseShippingEvent()\",\"IsTransactional\":false,\"PropagateIngestionProperties\":false,\"ManagedIdentity\":null}]"
