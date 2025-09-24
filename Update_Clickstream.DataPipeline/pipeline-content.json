@@ -1,0 +1,35 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "KustoQueryLanguage",
+        "typeProperties": {
+          "command": ".update table Product_Struct delete Top3delete append Top3Update <|\n    let Top3delete = Product_Struct\n        | where SKU in (V_TOP3SKU_BY_CLICK);\n    let Top3Update = Top3delete\n        | extend UnitCost=toreal(UnitCost * 1.15);",
+          "commandTimeout": "00:20:00"
+        },
+        "linkedService": {
+          "name": "Zava_eventhouse",
+          "properties": {
+            "type": "KustoDatabase",
+            "typeProperties": {
+              "endpoint": "https://trd-p8k5n5revaz9meba6k.z5.kusto.fabric.microsoft.com",
+              "workspaceId": "00000000-0000-0000-0000-000000000000",
+              "database": "46562685-b7e7-83ec-493e-e7f51d9e03d5"
+            },
+            "annotations": []
+          },
+          "objectId": "1d9e03d5-e7f5-493e-83ec-b7e746562685"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Update_Product_Price",
+        "dependsOn": []
+      }
+    ]
+  }
+}

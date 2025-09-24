@@ -17,7 +17,7 @@
         "workspaceId": "00000000-0000-0000-0000-000000000000",
         "itemId": "46562685-b7e7-83ec-493e-e7f51d9e03d5",
         "databaseName": "Zava_eventhouse",
-        "tableName": "Clickstream_agg_10min",
+        "tableName": "Clickstream_New",
         "inputSerialization": {
           "type": "Json",
           "properties": {
@@ -27,46 +27,16 @@
       },
       "inputNodes": [
         {
-          "name": "Aggregate"
+          "name": "GroupBy"
         }
       ],
       "inputSchemas": [
         {
-          "name": "Aggregate",
+          "name": "GroupBy",
           "schema": {
             "columns": [
               {
-                "name": "Nb_Click",
-                "type": "Float",
-                "fields": null,
-                "items": null
-              },
-              {
-                "name": "event_id",
-                "type": "Nvarchar(max)",
-                "fields": null,
-                "items": null
-              },
-              {
-                "name": "timestamp",
-                "type": "DateTime",
-                "fields": null,
-                "items": null
-              },
-              {
                 "name": "event_type",
-                "type": "Nvarchar(max)",
-                "fields": null,
-                "items": null
-              },
-              {
-                "name": "user_id",
-                "type": "Nvarchar(max)",
-                "fields": null,
-                "items": null
-              },
-              {
-                "name": "session_id",
                 "type": "Nvarchar(max)",
                 "fields": null,
                 "items": null
@@ -108,19 +78,13 @@
                 "items": null
               },
               {
-                "name": "EventProcessedUtcTime",
-                "type": "DateTime",
+                "name": "COUNT_event_id",
+                "type": "Float",
                 "fields": null,
                 "items": null
               },
               {
-                "name": "PartitionId",
-                "type": "BigInt",
-                "fields": null,
-                "items": null
-              },
-              {
-                "name": "EventEnqueuedUtcTime",
+                "name": "Window_End_Time",
                 "type": "DateTime",
                 "fields": null,
                 "items": null
@@ -146,85 +110,34 @@
   ],
   "operators": [
     {
-      "name": "Aggregate",
-      "type": "Aggregate",
+      "name": "Filter",
+      "type": "Filter",
       "inputNodes": [
         {
-          "name": "Filter"
+          "name": "Event_Clickstream-stream"
         }
       ],
       "properties": {
-        "aggregations": [
+        "conditions": [
           {
-            "aggregateFunction": "Sum",
-            "arguments": null,
             "column": {
               "expressionType": "ColumnReference",
               "node": null,
-              "columnName": "PartitionId",
+              "columnName": "country_code",
               "columnPathSegments": []
             },
-            "alias": "Nb_Click",
-            "partitionBy": [
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "event_id",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "event_type",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "sku",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "country",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "country_code",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "referral_source_type",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "referral_platform",
-                "columnPathSegments": []
-              },
-              {
-                "expressionType": "ColumnReference",
-                "node": null,
-                "columnName": "product_id",
-                "columnPathSegments": []
-              }
-            ],
-            "duration": {
-              "value": 10,
-              "unit": "Minute"
+            "operatorType": "NotEquals",
+            "value": {
+              "expressionType": "Literal",
+              "dataType": "Nvarchar(max)",
+              "value": "US"
             }
           }
         ]
       },
       "inputSchemas": [
         {
-          "name": "Filter",
+          "name": "Event_Clickstream-stream",
           "schema": {
             "columns": [
               {
@@ -317,34 +230,88 @@
       ]
     },
     {
-      "name": "Filter",
-      "type": "Filter",
+      "name": "GroupBy",
+      "type": "GroupBy",
       "inputNodes": [
         {
-          "name": "Event_Clickstream-stream"
+          "name": "Filter"
         }
       ],
       "properties": {
-        "conditions": [
+        "aggregations": [
           {
+            "aggregateFunction": "Count",
+            "arguments": [],
             "column": {
               "expressionType": "ColumnReference",
               "node": null,
-              "columnName": "country_code",
+              "columnName": "event_id",
               "columnPathSegments": []
             },
-            "operatorType": "NotEquals",
-            "value": {
-              "expressionType": "Literal",
-              "dataType": "Nvarchar(max)",
-              "value": "US"
+            "alias": "COUNT_event_id"
+          }
+        ],
+        "groupBy": [
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "event_type",
+            "columnPathSegments": []
+          },
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "sku",
+            "columnPathSegments": []
+          },
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "country",
+            "columnPathSegments": []
+          },
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "country_code",
+            "columnPathSegments": []
+          },
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "referral_source_type",
+            "columnPathSegments": []
+          },
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "referral_platform",
+            "columnPathSegments": []
+          },
+          {
+            "expressionType": "ColumnReference",
+            "node": null,
+            "columnName": "product_id",
+            "columnPathSegments": []
+          }
+        ],
+        "window": {
+          "type": "Tumbling",
+          "properties": {
+            "duration": {
+              "value": 10,
+              "unit": "Minute"
+            },
+            "offset": {
+              "value": 0,
+              "unit": "Second"
             }
           }
-        ]
+        }
       },
       "inputSchemas": [
         {
-          "name": "Event_Clickstream-stream",
+          "name": "Filter",
           "schema": {
             "columns": [
               {

@@ -9,7 +9,7 @@
   ],
   "destinations": [
     {
-      "id": "b7e1ee3d-98b0-4c9a-84cf-d8b335d61832",
+      "id": "7827edac-4457-4d50-aa16-3e933c50c77b",
       "name": "Eventhouse",
       "type": "Eventhouse",
       "properties": {
@@ -17,7 +17,144 @@
         "workspaceId": "00000000-0000-0000-0000-000000000000",
         "itemId": "46562685-b7e7-83ec-493e-e7f51d9e03d5",
         "databaseName": "Zava_eventhouse",
-        "tableName": "manufacturing",
+        "tableName": "ManufacturingTypes",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "ManageFields"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "ManageFields",
+          "schema": {
+            "columns": [
+              {
+                "name": "event_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SiteId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "City",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "AssetId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OperatorId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OperatorName",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SKU",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "BatchId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DefectProbability",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Vibration",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Temperature",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Humidity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "AnomalyFlag",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "9163f802-5345-44a3-bd2c-ceeaf792964b",
+      "name": "DerivedStream",
+      "type": "DerivedStream",
+      "properties": {
         "inputSerialization": {
           "type": "Json",
           "properties": {
@@ -29,18 +166,8 @@
         {
           "name": "SqlCode"
         }
-      ],
-      "inputSchemas": [
-        {
-          "name": "SqlCode",
-          "schema": {
-            "columns": []
-          }
-        }
       ]
-    }
-  ],
-  "streams": [
+    },
     {
       "id": "fd15fb5a-edcd-4099-b386-2f24324e10e5",
       "name": "eventManufacturing-stream",
@@ -55,6 +182,353 @@
   ],
   "operators": [
     {
+      "name": "ManageFields",
+      "type": "ManageFields",
+      "inputNodes": [
+        {
+          "name": "DerivedStream"
+        }
+      ],
+      "properties": {
+        "columns": [
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "event_type",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "event_type"
+          },
+          {
+            "type": "Cast",
+            "properties": {
+              "targetDataType": "DateTime",
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "timestamp",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "timestamp"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "SiteId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "SiteId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "City",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "City"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "AssetId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "AssetId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "OperatorId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "OperatorId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "OperatorName",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "OperatorName"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "ProductId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "ProductId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "SKU",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "SKU"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "BatchId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "BatchId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "DefectProbability",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "DefectProbability"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "Vibration",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "Vibration"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "Temperature",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "Temperature"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "Humidity",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "Humidity"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "EventProcessedUtcTime",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "EventProcessedUtcTime"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "PartitionId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "PartitionId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "EventEnqueuedUtcTime",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "EventEnqueuedUtcTime"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "AnomalyFlag",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "AnomalyFlag"
+          }
+        ]
+      },
+      "inputSchemas": [
+        {
+          "name": "DerivedStream",
+          "schema": {
+            "columns": [
+              {
+                "name": "event_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SiteId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "City",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "AssetId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OperatorId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OperatorName",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SKU",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "BatchId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DefectProbability",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Vibration",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Temperature",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Humidity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "AnomalyFlag",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "SqlCode",
       "type": "SQL",
       "inputNodes": [
@@ -63,13 +537,116 @@
         }
       ],
       "properties": {
-        "query": "--Init Query\nSELECT * INTO [Eventhouse] FROM [eventManufacturing-stream]"
+        "query": "--Init Query\n--SELECT * INTO [Eventhouse] FROM [eventManufacturing-stream]\nSELECT *,\n  CAST(CASE WHEN DefectProbability > 0.1 THEN 1 ELSE 0 END AS bit) AS AnomalyFlag\nINTO [DerivedStream]\nFROM\n  [eventManufacturing-stream]"
       },
       "inputSchemas": [
         {
           "name": "eventManufacturing-stream",
           "schema": {
-            "columns": []
+            "columns": [
+              {
+                "name": "event_type",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SiteId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "City",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "AssetId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OperatorId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OperatorName",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SKU",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "BatchId",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DefectProbability",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Vibration",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Temperature",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Humidity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
           }
         }
       ]

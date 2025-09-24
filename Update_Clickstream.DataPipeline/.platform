@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Update_Clickstream"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b65f9649-be06-b4eb-4ccd-a2006f00a503"
+  }
+}
