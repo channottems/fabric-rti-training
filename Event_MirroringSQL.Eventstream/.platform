@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventstream",
+    "displayName": "Event_MirroringSQL"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d4c8d813-8bc8-a792-4cd3-18ec8a282549"
+  }
+}
